@@ -1,9 +1,9 @@
 import axios, { type AxiosInstance } from 'axios'
 
 const client: AxiosInstance = axios.create({
-  withCredentials: false,
   headers: {
-    'Content-type': 'application/json'
+    'Content-type': 'application/json',
+    Accept: 'application/json'
   }
 })
 

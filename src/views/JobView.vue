@@ -1,36 +1,38 @@
 <script setup>
 import BackButton from '@/components/BackButton.vue'
 import { useRoute, RouterLink, useRouter } from 'vue-router'
-import axios from 'axios'
 import { useToast } from '@/components/ui/toast/use-toast'
-import { useGetJob } from '@/services/jobs-service'
+import { useGetJob, useDeleteJob } from '@/services/jobs-service'
 
 const route = useRoute()
 const router = useRouter()
-const toast = useToast()
+const { toast } = useToast()
 const jobId = route.params.id
 
-const deleteJob = async () => {
-  try {
-    const confirm = window.confirm('Are you sure you want to delete this job?')
-    if (confirm) {
-      await axios.delete(`/api/jobs/${jobId}`)
-      toast({
-        description: 'Job deleted successfully.'
-      })
-      router.push('/jobs')
-    }
-  } catch (error) {
+const { isLoading: jobIsLoading, data: jobData } = useGetJob(jobId)
+
+const { mutate: mutateDeleteJob, isLoading: deleteMutateIsLoading } = useDeleteJob({
+  onSuccess: () => {
+    toast({
+      description: 'Job deleted successfully.'
+    })
+    router.push('/jobs')
+  },
+  onError: (error) => {
     console.error('Error deleting job', error)
     toast({
       variant: 'destructive',
       description: 'There was an error deleting the job.'
     })
   }
-}
+})
 
-const { isLoading: jobIsLoading, data: jobData } = useGetJob(jobId)
-console.log('TCL -> jobData:', jobData)
+const deleteJob = () => {
+  const confirm = window.confirm('Are you sure you want to delete this job?')
+  if (confirm) {
+    mutateDeleteJob(jobId)
+  }
+}
 </script>
 
 <template>
@@ -86,7 +88,6 @@ console.log('TCL -> jobData:', jobData)
               {{ jobData.company.contactPhone }}
             </p>
           </div>
-
           <!-- Manage -->
           <div class="mt-6 rounded-lg bg-white p-6 shadow-md">
             <h3 class="mb-6 text-xl font-bold">Manage Job</h3>
@@ -106,8 +107,5 @@ console.log('TCL -> jobData:', jobData)
       </div>
     </div>
   </section>
-
-  <div v-else class="py-6 text-center text-gray-500">
-    <PulseLoader />
-  </div>
+  <div v-else class="py-6 text-center text-gray-500">...</div>
 </template>

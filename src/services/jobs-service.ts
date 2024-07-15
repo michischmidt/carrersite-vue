@@ -1,6 +1,6 @@
 import { client } from '@/util/http-common'
 import { buildQueryParams } from '@/util/query-builder'
-import { useQuery, type UseQueryOptions } from '@tanstack/vue-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 
 const JOBS_STRING_URL = 'https://my-json-server.typicode.com/michischmidt/carrersite-vue/jobs'
 
@@ -19,7 +19,7 @@ export type Job = {
 }
 
 export const useGetJobs = (params?: Record<string, any>) => {
-  const queryOptions: UseQueryOptions<Job[], Error> = {
+  return useQuery<Job[], Error>({
     queryKey: ['jobs', params],
     queryFn: async () => {
       const queryString = buildQueryParams(params || {})
@@ -27,20 +27,29 @@ export const useGetJobs = (params?: Record<string, any>) => {
       const response = await client.get(url)
       return response.data
     }
-  }
-
-  return useQuery<Job[], Error>(queryOptions)
+  })
 }
 
-export const useGetJob = (id: string) => {
-  const queryOptions: UseQueryOptions<Job, Error> = {
-    queryKey: ['job', id],
+export const useGetJob = (jobId: string) => {
+  return useQuery<Job, Error>({
+    queryKey: ['job', jobId],
     queryFn: async () => {
-      const url = `${JOBS_STRING_URL}/${id}`
+      const url = `${JOBS_STRING_URL}/${jobId}`
       const response = await client.get(url)
       return response.data
     }
-  }
+  })
+}
 
-  return useQuery<Job, Error>(queryOptions)
+export const useDeleteJob = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (jobId: string): Promise<void> => {
+      await client.delete(`${JOBS_STRING_URL}/${jobId}`)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['jobs'] })
+    }
+  })
 }

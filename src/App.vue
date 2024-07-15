@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import BasicTools from './components/BasicTools.vue'
+import Navbar from './components/Navbar.vue'
+import Hero from './components/Hero.vue'
+import HomeCards from './components/HomeCards.vue'
+import JobListing from './components/JobListing.vue'
 </script>
 
 <template>
-  <h1 class="text-2xl">Test</h1>
-  <BasicTools />
+  <Navbar />
+  <Hero />
+  <!-- <HomeCards />
+  <JobListing /> -->
 </template>
 
 <style scoped></style>

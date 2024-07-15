@@ -1,48 +1,48 @@
 <script setup>
-import { RouterLink } from 'vue-router';
-import JobListing from './JobListing.vue';
-import { reactive, defineProps, onMounted } from 'vue';
-import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
-import axios from 'axios';
+import { RouterLink } from 'vue-router'
+import JobListing from './JobListing.vue'
+import { reactive, defineProps, onMounted } from 'vue'
+import axios from 'redaxios'
+import { useQuery } from '@tanstack/vue-query'
 
 defineProps({
   limit: Number,
   showButton: {
     type: Boolean,
-    default: false,
-  },
-});
+    default: false
+  }
+})
 
 const state = reactive({
   jobs: [],
-  isLoading: true,
-});
+  isLoading: true
+})
 
 onMounted(async () => {
   try {
-    const response = await axios.get('/api/jobs');
-    state.jobs = response.data;
+    const response = await axios.get(
+      'https://my-json-server.typicode.com/michischmidt/carrersite-vue/jobs'
+    )
+    state.jobs = response.data
+    console.log('TCL -> onMounted -> response:', response)
   } catch (error) {
-    console.error('Error fetching jobs', error);
+    console.error('Error fetching jobs', error)
   } finally {
-    state.isLoading = false;
+    state.isLoading = false
   }
-});
+})
 </script>
 
 <template>
   <section class="bg-blue-50 px-4 py-10">
-    <div class="container-xl lg:container m-auto">
-      <h2 class="text-3xl font-bold text-green-500 mb-6 text-center">
-        Browse Jobs
-      </h2>
+    <div class="container-xl m-auto lg:container">
+      <h2 class="mb-6 text-center text-3xl font-bold text-green-500">Browse Jobs</h2>
       <!-- Show loading spinner while loading is true -->
-      <div v-if="state.isLoading" class="text-center text-gray-500 py-6">
-        <PulseLoader />
-      </div>
+      <div v-if="state.isLoading" class="py-6 text-center text-gray-500">...</div>
 
       <!-- Shoe job listing when done loading -->
-      <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <!-- TODO: limit should be query param and maybe add pagination -->
         <JobListing
           v-for="job in state.jobs.slice(0, limit || state.jobs.length)"
           :key="job.id"
@@ -52,10 +52,10 @@ onMounted(async () => {
     </div>
   </section>
 
-  <section v-if="showButton" class="m-auto max-w-lg my-10 px-6">
+  <section v-if="showButton" class="m-auto my-10 max-w-lg px-6">
     <RouterLink
       to="/jobs"
-      class="block bg-black text-white text-center py-4 px-6 rounded-xl hover:bg-gray-700"
+      class="block rounded-xl bg-black px-6 py-4 text-center text-white hover:bg-gray-700"
       >View All Jobs</RouterLink
     >
   </section>

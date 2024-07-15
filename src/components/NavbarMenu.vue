@@ -1,11 +1,11 @@
 <script setup>
-// import { RouterLink, useRoute } from 'vue-router';
+import { RouterLink, useRoute } from 'vue-router'
 import logo from '@/assets/img/logo.png'
 
-// const isActiveLink = (routePath) => {
-//   const route = useRoute();
-//   return route.path === routePath;
-// };
+const isActiveLink = (routePath) => {
+  const route = useRoute()
+  return route.path === routePath
+}
 </script>
 
 <template>
@@ -20,9 +20,19 @@ import logo from '@/assets/img/logo.png'
           </RouterLink>
           <div class="md:ml-auto">
             <div class="flex space-x-2">
-              <RouterLink to="/">Home</RouterLink>
-              <RouterLink to="/jobs">Jobs</RouterLink>
-              <RouterLink to="/jobs/add">Add Job</RouterLink>
+              <template v-for="link in links" :key="link.to">
+                <RouterLink
+                  :to="link.to"
+                  :class="[
+                    isActiveLink(link.to) ? 'bg-green-900' : 'hover:bg-gray-900 hover:text-white',
+                    'text-white',
+                    'px-3',
+                    'py-2',
+                    'rounded-md'
+                  ]"
+                  >{{ link.label }}</RouterLink
+                >
+              </template>
             </div>
           </div>
         </div>
@@ -30,3 +40,11 @@ import logo from '@/assets/img/logo.png'
     </div>
   </nav>
 </template>
+
+<script>
+const links = [
+  { to: '/', label: 'Home' },
+  { to: '/jobs', label: 'Jobs' },
+  { to: '/jobs/add', label: 'Add Job' }
+]
+</script>

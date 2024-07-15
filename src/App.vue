@@ -4,7 +4,7 @@ import BasicTools from './components/BasicTools.vue'
 </script>
 
 <template>
-  <h1>Test</h1>
+  <h1 class="text-2xl">Test</h1>
   <BasicTools />
 </template>
 

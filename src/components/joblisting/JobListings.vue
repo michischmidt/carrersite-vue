@@ -12,7 +12,7 @@ defineProps({
   }
 })
 
-const { isLoading: jobsIsLoading, data: jobsData } = useGetJobs({ _limit: 3 })
+const { isLoading: jobsIsLoading, data: jobsData } = useGetJobs()
 </script>
 
 <template>

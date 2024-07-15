@@ -1,4 +1,5 @@
 import { client } from '@/util/http-common'
+import { buildQueryParams } from '@/util/query-builder'
 import { useQuery, type UseQueryOptions } from '@tanstack/vue-query'
 
 const JOBS_STRING_URL = 'https://my-json-server.typicode.com/michischmidt/carrersite-vue/jobs'
@@ -17,15 +18,6 @@ export type Job = {
   }
 }
 
-// Utility function to build query parameters
-const buildQueryParams = (params: Record<string, any>) => {
-  const query = Object.entries(params)
-    .filter(([, value]) => value !== undefined)
-    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-    .join('&')
-  return query ? `?${query}` : ''
-}
-
 export const useGetJobs = (params?: Record<string, any>) => {
   const queryOptions: UseQueryOptions<Job[], Error> = {
     queryKey: ['jobs', params],
@@ -38,4 +30,17 @@ export const useGetJobs = (params?: Record<string, any>) => {
   }
 
   return useQuery<Job[], Error>(queryOptions)
+}
+
+export const useGetJob = (id: string) => {
+  const queryOptions: UseQueryOptions<Job, Error> = {
+    queryKey: ['job', id],
+    queryFn: async () => {
+      const url = `${JOBS_STRING_URL}/${id}`
+      const response = await client.get(url)
+      return response.data
+    }
+  }
+
+  return useQuery<Job, Error>(queryOptions)
 }

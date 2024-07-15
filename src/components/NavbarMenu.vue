@@ -6,6 +6,13 @@ const isActiveLink = (routePath) => {
   const route = useRoute()
   return route.path === routePath
 }
+
+const links = [
+  { to: '/', label: 'Home' },
+  { to: '/jobs', label: 'Jobs' },
+  { to: '/jobs/add', label: 'Add Job' },
+  { to: 'https://michaelschmidt.frontstart.de', label: 'Contact', target: '_blank' }
+]
 </script>
 
 <template>
@@ -22,6 +29,7 @@ const isActiveLink = (routePath) => {
             <div class="flex space-x-2">
               <template v-for="link in links" :key="link.to">
                 <RouterLink
+                  v-if="!link.target"
                   :to="link.to"
                   :class="[
                     isActiveLink(link.to) ? 'bg-green-900' : 'hover:bg-gray-900 hover:text-white',
@@ -32,6 +40,19 @@ const isActiveLink = (routePath) => {
                   ]"
                   >{{ link.label }}</RouterLink
                 >
+                <a
+                  v-else
+                  :href="link.to"
+                  :target="link.target"
+                  :class="[
+                    'hover:bg-gray-900 hover:text-white',
+                    'text-white',
+                    'px-3',
+                    'py-2',
+                    'rounded-md'
+                  ]"
+                  >{{ link.label }}</a
+                >
               </template>
             </div>
           </div>
@@ -40,11 +61,3 @@ const isActiveLink = (routePath) => {
     </div>
   </nav>
 </template>
-
-<script>
-const links = [
-  { to: '/', label: 'Home' },
-  { to: '/jobs', label: 'Jobs' },
-  { to: '/jobs/add', label: 'Add Job' }
-]
-</script>

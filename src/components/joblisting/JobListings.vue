@@ -1,9 +1,8 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import JobListing from './JobListing.vue'
-import { reactive, defineProps, onMounted } from 'vue'
-import axios from 'redaxios'
-import { useQuery } from '@tanstack/vue-query'
+import { defineProps } from 'vue'
+import { useGetJobs } from '@/services/jobs-service'
 
 defineProps({
   limit: Number,
@@ -13,24 +12,7 @@ defineProps({
   }
 })
 
-const state = reactive({
-  jobs: [],
-  isLoading: true
-})
-
-onMounted(async () => {
-  try {
-    const response = await axios.get(
-      'https://my-json-server.typicode.com/michischmidt/carrersite-vue/jobs'
-    )
-    state.jobs = response.data
-    console.log('TCL -> onMounted -> response:', response)
-  } catch (error) {
-    console.error('Error fetching jobs', error)
-  } finally {
-    state.isLoading = false
-  }
-})
+const { isLoading: jobsIsLoading, data: jobsData } = useGetJobs()
 </script>
 
 <template>
@@ -38,13 +20,13 @@ onMounted(async () => {
     <div class="container-xl m-auto lg:container">
       <h2 class="mb-6 text-center text-3xl font-bold text-green-500">Browse Jobs</h2>
       <!-- Show loading spinner while loading is true -->
-      <div v-if="state.isLoading" class="py-6 text-center text-gray-500">...</div>
+      <div v-if="jobsIsLoading" class="py-6 text-center text-gray-500">...</div>
 
       <!-- Shoe job listing when done loading -->
       <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-3">
         <!-- TODO: limit should be query param and maybe add pagination -->
         <JobListing
-          v-for="job in state.jobs.slice(0, limit || state.jobs.length)"
+          v-for="job in jobsData.slice(0, limit || state.jobs.length)"
           :key="job.id"
           :job="job"
         />

@@ -17,11 +17,22 @@ export type Job = {
   }
 }
 
-export const useGetJobs = (limit?: number) => {
+// Utility function to build query parameters
+const buildQueryParams = (params: Record<string, any>) => {
+  const query = Object.entries(params)
+    .filter(([, value]) => value !== undefined)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&')
+  return query ? `?${query}` : ''
+}
+
+export const useGetJobs = (params?: Record<string, any>) => {
   const queryOptions: UseQueryOptions<Job[], Error> = {
-    queryKey: ['jobs'],
+    queryKey: ['jobs', params],
     queryFn: async () => {
-      const response = await client.get(`${JOBS_STRING_URL}?_limit=${(limit as number) || ''}`)
+      const queryString = buildQueryParams(params || {})
+      const url = `${JOBS_STRING_URL}${queryString}`
+      const response = await client.get(url)
       return response.data
     }
   }

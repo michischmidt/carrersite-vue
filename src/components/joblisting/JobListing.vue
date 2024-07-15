@@ -28,7 +28,6 @@ const truncatedDescription = computed(() => {
         <div class="my-2 text-gray-600">{{ job.type }}</div>
         <h3 class="text-xl font-bold">{{ job.title }}</h3>
       </div>
-
       <div class="mb-5">
         <div>
           {{ truncatedDescription }}
@@ -37,14 +36,11 @@ const truncatedDescription = computed(() => {
           {{ showFullDescription ? 'Less' : 'More' }}
         </button>
       </div>
-
       <h3 class="mb-2 text-green-500">{{ job.salary }} / Year</h3>
-
       <div class="mb-5 border border-gray-100"></div>
-
       <div class="mb-4 flex flex-col justify-between lg:flex-row">
-        <div class="mb-3 text-orange-700">
-          <i class="pi pi-map-marker text-orange-700"></i>
+        <div class="mb-3 text-blue-400">
+          <i class="pi pi-map-marker text-blue-400"></i>
           {{ job.location }}
         </div>
         <RouterLink

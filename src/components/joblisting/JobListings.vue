@@ -12,7 +12,7 @@ defineProps({
   }
 })
 
-const { isLoading: jobsIsLoading, data: jobsData } = useGetJobs()
+const { isLoading: jobsIsLoading, data: jobsData } = useGetJobs({ _limit: 3 })
 </script>
 
 <template>
@@ -21,19 +21,17 @@ const { isLoading: jobsIsLoading, data: jobsData } = useGetJobs()
       <h2 class="mb-6 text-center text-3xl font-bold text-green-500">Browse Jobs</h2>
       <!-- Show loading spinner while loading is true -->
       <div v-if="jobsIsLoading" class="py-6 text-center text-gray-500">...</div>
-
       <!-- Shoe job listing when done loading -->
       <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-3">
         <!-- TODO: limit should be query param and maybe add pagination -->
         <JobListing
-          v-for="job in jobsData.slice(0, limit || state.jobs.length)"
+          v-for="job in jobsData.slice(0, limit || jobsData.length)"
           :key="job.id"
           :job="job"
         />
       </div>
     </div>
   </section>
-
   <section v-if="showButton" class="m-auto my-10 max-w-lg px-6">
     <RouterLink
       to="/jobs"

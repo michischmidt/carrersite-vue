@@ -10,7 +10,6 @@ const { toast } = useToast()
 const jobId = route.params.id
 
 const { isLoading: jobIsLoading, data: jobData } = useGetJob(jobId)
-
 const { mutate: mutateDeleteJob, isLoading: deleteMutateIsLoading } = useDeleteJob({
   onSuccess: () => {
     toast({

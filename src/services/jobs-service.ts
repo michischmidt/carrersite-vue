@@ -53,3 +53,16 @@ export const useDeleteJob = () => {
     }
   })
 }
+
+export const useUpdateJob = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (jobDto: Job): Promise<void> => {
+      await client.put(`${JOBS_STRING_URL}`, jobDto)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['jobs'] })
+    }
+  })
+}

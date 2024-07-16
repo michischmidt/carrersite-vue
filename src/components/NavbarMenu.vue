@@ -11,7 +11,7 @@ const links = [
   { to: '/', label: 'Home' },
   { to: '/jobs', label: 'Jobs' },
   { to: '/jobs/add', label: 'Add Job' },
-  { to: 'https://michaelschmidt.frontstart.de', label: 'Contact', target: '_blank' }
+  { to: 'https://github.com/michischmidt/carrersite-vue', label: 'Github Repo', target: '_blank' }
 ]
 </script>
 

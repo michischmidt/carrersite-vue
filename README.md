@@ -12,6 +12,7 @@ Basic Vue SPA for learning the framwork
 - [TanStack Query](https://tanstack.com/query/latest)
 - [shadcn-vue](https://www.shadcn-vue.com/)
 - [Vitest](https://vitest.dev/)
+- [My JSON Server](https://my-json-server.typicode.com/)
 
 ## Project Setup
 
